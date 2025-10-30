@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "291713822707",
+    "firebase_url": "https://online-shop-320e0-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "online-shop-320e0",
+    "storage_bucket": "online-shop-320e0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:291713822707:android:6d737258daa8cef8366c86",
+        "android_client_info": {
+          "package_name": "com.example.onlineshop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb4K3bOoJsVqybXFpLavwZLeq6ch4S9Ww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
