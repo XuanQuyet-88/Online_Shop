@@ -12,4 +12,5 @@ class MainViewModel(): ViewModel() {
     fun loadBanner() : MutableState<List<SliderModel>> = repo.loadBanner()
     fun loadCategory(): MutableState<List<CategoryModel>> = repo.loadCategory()
     fun loadPopular(): MutableState<List<ItemsModel>> = repo.loadPopular()
+    fun loadFiltered(id: String): MutableState<List<ItemsModel>> = repo.loadFiltered(id)
 }

@@ -29,6 +29,10 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.OnlineShop">
         </activity>
+        <activity
+            android:name=".activity.ListItemsActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

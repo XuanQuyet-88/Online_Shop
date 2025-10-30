@@ -9,13 +9,13 @@ import com.example.onlineshop.model.SliderModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 
 class MainRepository {
     private val TAG = "FirebaseRepo"
-
     private val db = FirebaseDatabase.getInstance()
-
+    private val _filteredItems = mutableStateOf<List<ItemsModel>>(emptyList())
     fun loadBanner(): MutableState<List<SliderModel>> {
         val listData = mutableStateOf<List<SliderModel>>(emptyList())
         val ref = db.getReference("Banner")
@@ -24,13 +24,6 @@ class MainRepository {
 
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-//                val lists = mutableListOf<SliderModel>()
-//                for (i in snapshot.children) {
-//                    val data = i.getValue(SliderModel::class.java)
-//                    data?.let { lists.add(it) }
-//                }
-//                listData.value = lists
-
                 if (snapshot.exists()) {
                     val lists = mutableListOf<SliderModel>()
                     for (i in snapshot.children) {
@@ -42,7 +35,7 @@ class MainRepository {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e(TAG, "loadBanner cancelled: ${error.message}")
             }
         })
         return listData
@@ -65,7 +58,7 @@ class MainRepository {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e(TAG, "loadCategory cancelled: ${error.message}")
             }
         })
         return listData
@@ -74,7 +67,8 @@ class MainRepository {
     fun loadPopular(): MutableState<List<ItemsModel>>{
         val listData = mutableStateOf<List<ItemsModel>>(emptyList())
         val ref = db.getReference("Items")
-        ref.addValueEventListener(object: ValueEventListener{
+        val query: Query = ref.orderByChild("showRecommended").equalTo(true)
+        query.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     val lists = mutableListOf<ItemsModel>()
@@ -87,9 +81,36 @@ class MainRepository {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e(TAG, "loadPopular cancelled: ${error.message}")
             }
         })
         return listData
+    }
+
+    fun loadFiltered(id: String): MutableState<List<ItemsModel>> {
+        val ref = db.getReference("Items")
+        val query: Query = ref.orderByChild("categoryId").equalTo(id)
+
+        query.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val lists = mutableListOf<ItemsModel>()
+                if(snapshot.exists()){
+                    for(i in snapshot.children){
+                        val data = i.getValue(ItemsModel::class.java)
+                        data?.let {
+                            lists.add(it)
+                        }
+                    }
+                }
+                _filteredItems.value = lists
+                Log.d(TAG, "loadFiltered: Loaded ${lists.size} items for id=$id")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "loadFiltered cancelled: ${error.message}")
+            }
+        })
+
+        return _filteredItems
     }
 }

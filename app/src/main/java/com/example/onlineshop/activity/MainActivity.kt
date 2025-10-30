@@ -1,8 +1,10 @@
 package com.example.onlineshop.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -30,6 +32,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -52,12 +56,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CategoryModel
 import com.example.onlineshop.model.ItemsModel
-import com.example.onlineshop.model.ListItems
 import com.example.onlineshop.model.SliderModel
 import com.example.onlineshop.ui.theme.OnlineShopTheme
 import com.example.onlineshop.viewModel.MainViewModel
@@ -69,14 +73,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             OnlineShopTheme {
-                MainActivityScreen()
+                MainActivityScreen{
+
+                }
             }
         }
     }
 }
 
 @Composable
-fun MainActivityScreen() {
+fun MainActivityScreen(onCartClick: () -> Unit) {
     val viewModel = MainViewModel()
     val banners = remember { mutableStateListOf<SliderModel>() }
     val categories = remember { mutableStateListOf<CategoryModel>() }
@@ -163,6 +169,7 @@ fun MainActivityScreen() {
                     }
                 } else {
                     Banner(bannerState.value)
+                    Log.d("MainActivity", "Banner171: ${bannerState.value.size}")
                 }
             }
 
@@ -203,20 +210,71 @@ fun MainActivityScreen() {
 
             //List item popular
             item {
-                if(showPopularLoading){
+                if (showPopularLoading) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp),
                         contentAlignment = Alignment.Center
-                    ){
+                    ) {
                         CircularProgressIndicator()
                     }
-                }else{
+                } else {
                     ListItems(popularState.value)
                 }
             }
         }
+        BottomMenu(
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(bottomMenu){
+                    bottom.linkTo(parent.bottom)
+                },
+            onItemClick = onCartClick
+        )
+    }
+}
+
+@Composable
+fun BottomMenu(modifier: Modifier, onItemClick: () -> Unit){
+    Row(
+        modifier = modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .background(
+                colorResource(R.color.darkBrown),
+                shape = RoundedCornerShape(10.dp)
+            ),
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        BottomMenuItem(icon = painterResource(R.drawable.btn_1), text = "Explorer")
+        BottomMenuItem(icon = painterResource(R.drawable.btn_2), text = "Cart", onItemClick = onItemClick)
+        BottomMenuItem(icon = painterResource(R.drawable.btn_3), text = "Favorite")
+        BottomMenuItem(icon = painterResource(R.drawable.btn_4), text = "Orders")
+        BottomMenuItem(icon = painterResource(R.drawable.btn_5), text = "Profile")
+    }
+}
+
+@Composable
+fun BottomMenuItem(icon: Painter, text: String, onItemClick: (() -> Unit)? = null) {
+    Column(
+        modifier = Modifier
+            .height(70.dp)
+            .clickable { onItemClick?.invoke() }
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            icon,
+            contentDescription = text,
+            tint = Color.White
+        )
+        Spacer(modifier = Modifier.padding(vertical = 4.dp))
+        Text(
+            text = text,
+            color = Color.White,
+            fontSize = 10.sp
+        )
     }
 }
 
@@ -237,7 +295,13 @@ fun CategoryList(categories: List<CategoryModel>) {
                 isSelected = selectedIndex == index,
                 onItemClick = {
                     selectedIndex = index
-                    Handler(Looper.getMainLooper()).postDelayed({}, 500)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        val intent = Intent(context, ListItemsActivity::class.java).apply {
+                            putExtra("id", categories[index].id.toString())
+                            putExtra("title", categories[index].title)
+                        }
+                        startActivity(context, intent, null)
+                    }, 500)
                 }
             )
         }
@@ -309,24 +373,18 @@ fun AutoSliding(
 ) {
     val pagerState = rememberPagerState(pageCount = { banners.size })
     val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
-
-//    LaunchedEffect(pagerState.currentPage, isDragged) {
-//        if(!isDragged){
-//            delay(3000)
-//            val nextPage = (pagerState.currentPage + 1) % banners.size
-//            pagerState.animateScrollToPage(nextPage)
-//        }
-//    }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(3000)
-            if (!isDragged && banners.isNotEmpty()) {
-                val nextPage = (pagerState.currentPage + 1) % banners.size
-                pagerState.animateScrollToPage(nextPage)
+    if(banners.isNotEmpty()){
+        LaunchedEffect(Unit) {
+            while (true) {
+                delay(3000)
+                if (!isDragged && banners.isNotEmpty()) {
+                    val nextPage = (pagerState.currentPage + 1) % banners.size
+                    pagerState.animateScrollToPage(nextPage)
+                }
             }
         }
     }
+
 
     Column(modifier = Modifier.fillMaxWidth()) {
         HorizontalPager(
