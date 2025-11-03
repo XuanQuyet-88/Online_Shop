@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.ui.util)
     implementation(libs.material3)
     implementation(libs.androidx.animation.core)
+    implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

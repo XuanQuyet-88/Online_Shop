@@ -22,6 +22,7 @@ composeMaterial = "1.5.4"
 uiUtil = "1.9.4"
 material3 = "1.4.0"
 animationCore = "1.9.4"
+constraintlayout = "2.2.1"
 
 [libraries]
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeMaterial" }
@@ -53,6 +54,7 @@ androidx-compose-material = { group = "androidx.wear.compose", name = "compose-m
 androidx-ui-util = { group = "androidx.compose.ui", name = "ui-util", version.ref = "uiUtil" }
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-animation-core = { group = "androidx.compose.animation", name = "animation-core", version.ref = "animationCore" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

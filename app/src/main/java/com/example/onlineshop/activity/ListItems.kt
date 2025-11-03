@@ -1,5 +1,6 @@
 package com.example.onlineshop.activity
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,12 +31,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
 import com.example.onlineshop.R
 import com.example.onlineshop.model.ItemsModel
 
 @Composable
 fun PopularItem(items: List<ItemsModel>, pos: Int) {
+    val contex = LocalContext.current
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -51,7 +55,10 @@ fun PopularItem(items: List<ItemsModel>, pos: Int) {
                 )
                 .height(195.dp)
                 .clickable {
-
+                    val intent = Intent(contex, DetailActivity::class.java).apply {
+                        putExtra("object", items[pos])
+                    }
+                    startActivity(contex, intent, null)
                 },
             contentScale = ContentScale.Crop
         )
@@ -107,7 +114,7 @@ fun ListItems(items: List<ItemsModel>) {
             .padding(horizontal = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(items.size){index ->
+        items(items.size) { index ->
             PopularItem(items, index)
         }
     }
@@ -123,7 +130,7 @@ fun ListItemsFullSize(items: List<ItemsModel>) {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(items.size){row ->
+        items(items.size) { row ->
             PopularItem(items, row)
         }
     }
