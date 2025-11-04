@@ -4,6 +4,7 @@ import java.io.Serializable
 
 
 data class ItemsModel(
+    var id: String = "",
     var title: String = "",
     var description: String = "",
     var picUrl: ArrayList<String> = ArrayList(),

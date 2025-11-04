@@ -1,0 +1,10 @@
+package com.example.onlineshop.model
+
+data class CartItem (
+    var productId: String = "",
+    var model: String = "",
+    var quantity: Int = 0,
+    var price: Double = 0.0,
+    var imageUrl: String = "",
+    var title: String = ""
+)

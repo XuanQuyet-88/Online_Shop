@@ -1,6 +1,9 @@
 package com.example.onlineshop.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,24 +48,48 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberAsyncImagePainter
 import com.example.onlineshop.R
+import com.example.onlineshop.helper.CartManager
 import com.example.onlineshop.model.ItemsModel
+import com.google.firebase.auth.FirebaseAuth
 
 class DetailActivity : BaseActivity() {
     private lateinit var item: ItemsModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         item = intent.getSerializableExtra("object") as ItemsModel
 
         setContent {
+            var selectedModelIndex by remember { mutableStateOf(-1) }
             DetailScreen(
                 item = item,
                 onBackClick = { finish() },
+                selectedModelIndex = selectedModelIndex,
+                onModelSelected = { selectedModelIndex = it },
                 onAddToCartClick = {
-                    item.numberInCart = 1
-                    //DO SOMETHING
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "Unknown User"
+                    val selectedModel =
+                        if (selectedModelIndex >= 0) item.model[selectedModelIndex] else ""
+                    if (selectedModel.isEmpty()) {
+                        Toast.makeText(this, "Please select a model first", Toast.LENGTH_SHORT)
+                            .show()
+                        return@DetailScreen
+                    }
+                    Log.d("ccc", "id product: ${item.id}")
+                    CartManager.addToCart(
+                        userId,
+                        item.id,
+                        selectedModel,
+                        item.price,
+                        1,
+                        item.picUrl.first(),
+                        item.title
+                    )
+                    Toast.makeText(this, "Added to cart", Toast.LENGTH_SHORT).show()
                 },
-                onCartClick = {}
+                onCartClick = {
+                    val intent = Intent(this, CartActivity::class.java)
+                    startActivity(intent)
+                }
             )
         }
     }
@@ -70,12 +97,13 @@ class DetailActivity : BaseActivity() {
     @Composable
     private fun DetailScreen(
         item: ItemsModel,
+        selectedModelIndex: Int,
+        onModelSelected: (Int) -> Unit,
         onBackClick: () -> Unit,
         onAddToCartClick: () -> Unit,
         onCartClick: () -> Unit
     ) {
         var selectedImageUrl by remember { mutableStateOf(item.picUrl.first()) }
-        var selecttedModelIndex by remember { mutableStateOf(-1) }
 
         Column(
             modifier = Modifier
@@ -165,8 +193,8 @@ class DetailActivity : BaseActivity() {
             RatingBar(rating = item.rating)
             ModelDelector(
                 models = item.model,
-                selectedModelIndex = selecttedModelIndex,
-                onModelSelected = { selecttedModelIndex = it }
+                selectedModelIndex = selectedModelIndex,
+                onModelSelected = onModelSelected
             )
             Text(
                 text = item.description,

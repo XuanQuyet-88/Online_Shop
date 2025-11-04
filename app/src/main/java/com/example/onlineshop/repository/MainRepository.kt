@@ -48,7 +48,7 @@ class MainRepository {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     val lists = mutableListOf<CategoryModel>()
-                    for(i in snapshot.children){
+                    for (i in snapshot.children) {
                         val data = i.getValue(CategoryModel::class.java)
                         data?.let { lists.add(it) }
                     }
@@ -64,19 +64,24 @@ class MainRepository {
         return listData
     }
 
-    fun loadPopular(): MutableState<List<ItemsModel>>{
+    fun loadPopular(): MutableState<List<ItemsModel>> {
         val listData = mutableStateOf<List<ItemsModel>>(emptyList())
         val ref = db.getReference("Items")
         val query: Query = ref.orderByChild("showRecommended").equalTo(true)
-        query.addListenerForSingleValueEvent(object: ValueEventListener{
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     val lists = mutableListOf<ItemsModel>()
-                    for(i in snapshot.children){
+                    for (i in snapshot.children) {
                         val data = i.getValue(ItemsModel::class.java)
-                        data?.let { lists.add(it) }
+                        data?.let {
+                            data.id = i.key ?: ""
+                            Log.d(TAG, "loadPopular: ${data.id}")
+                            lists.add(it)
+                        }
                     }
                     listData.value = lists
+                    Log.d(TAG, "loadPopular: Loaded ${listData.value} items")
                 }
             }
 
@@ -91,13 +96,14 @@ class MainRepository {
         val ref = db.getReference("Items")
         val query: Query = ref.orderByChild("categoryId").equalTo(id)
 
-        query.addListenerForSingleValueEvent(object: ValueEventListener {
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val lists = mutableListOf<ItemsModel>()
-                if(snapshot.exists()){
-                    for(i in snapshot.children){
+                if (snapshot.exists()) {
+                    for (i in snapshot.children) {
                         val data = i.getValue(ItemsModel::class.java)
                         data?.let {
+                            data.id = i.key ?: ""
                             lists.add(it)
                         }
                     }
