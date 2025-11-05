@@ -32,12 +32,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.onlineshop.R
 import com.example.onlineshop.model.ItemsModel
 
 @Composable
-fun PopularItem(items: List<ItemsModel>, pos: Int) {
+fun PopularItem(items: List<ItemsModel>, pos: Int, navController: NavController) {
     val contex = LocalContext.current
     Column(
         modifier = Modifier
@@ -55,11 +56,72 @@ fun PopularItem(items: List<ItemsModel>, pos: Int) {
                 )
                 .height(195.dp)
                 .clickable {
-                    val intent = Intent(contex, DetailActivity::class.java).apply {
-                        putExtra("object", items[pos])
-                    }
-                    startActivity(contex, intent, null)
+                    //DO SOMETHING
+                    navController.navigate("detail/${items[pos].id}")
                 },
+            contentScale = ContentScale.Crop
+        )
+
+        Text(
+            text = items[pos].title,
+            color = Color.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+
+        Row(
+            modifier = Modifier
+                .width(175.dp)
+                .padding(top = 4.dp)
+        ) {
+            Row {
+                Image(
+                    painter = painterResource(id = R.drawable.star),
+                    contentDescription = "Rating",
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+
+                Spacer(Modifier.width(8.dp))
+
+                Text(
+                    text = items[pos].rating.toString(),
+                    color = Color.Black,
+                    fontSize = 15.sp
+                )
+
+                Text(
+                    text = "$${items[pos].price}",
+                    color = colorResource(R.color.darkBrown),
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.fillMaxWidth(),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PopularItem(items: List<ItemsModel>, pos: Int) {
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+            .wrapContentHeight()
+    ) {
+        AsyncImage(
+            model = items[pos].picUrl.firstOrNull(),
+            contentDescription = items[pos].title,
+            modifier = Modifier
+                .width(175.dp)
+                .background(
+                    colorResource(R.color.lightBrown),
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .height(195.dp),
             contentScale = ContentScale.Crop
         )
 
@@ -121,7 +183,7 @@ fun ListItems(items: List<ItemsModel>) {
 }
 
 @Composable
-fun ListItemsFullSize(items: List<ItemsModel>) {
+fun ListItemsFullSize(items: List<ItemsModel>, navController: NavController) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
@@ -131,7 +193,7 @@ fun ListItemsFullSize(items: List<ItemsModel>) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(items.size) { row ->
-            PopularItem(items, row)
+            PopularItem(items, row, navController)
         }
     }
 }

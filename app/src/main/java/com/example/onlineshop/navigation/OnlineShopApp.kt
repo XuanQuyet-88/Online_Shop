@@ -1,16 +1,24 @@
 package com.example.onlineshop.navigation
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.onlineshop.activity.CartScreen
+import com.example.onlineshop.activity.ListItemScreen
 import com.example.onlineshop.activity.MainActivityScreen
+import com.example.onlineshop.screens.DetailScreen
 import com.example.onlineshop.screens.LoginScreen
 import com.example.onlineshop.screens.RegisterScreen
 import com.example.onlineshop.screens.ResetPasswordScreen
+import com.example.onlineshop.viewModel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun OnlineShopApp() {
     val navController = rememberNavController()
@@ -51,7 +59,9 @@ fun OnlineShopApp() {
 
         composable(Routes.HOME) {
             MainActivityScreen(
+                navController = navController,
                 onCartClick = {
+                    navController.navigate(Routes.CART)
                 }
             )
         }
@@ -61,6 +71,43 @@ fun OnlineShopApp() {
                 onBackToLogin = {
                     navController.navigate(Routes.LOGIN)
                 }
+            )
+        }
+        composable(Routes.CART) {
+            CartScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(
+            Routes.DETAIL,
+            arguments = listOf(
+                navArgument("itemId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getString("itemId") ?: ""
+            DetailScreen(
+                itemId = itemId,  // Pass mới
+                onBackClick = { navController.popBackStack() },
+                navController = navController
+            )
+        }
+        composable(
+            Routes.LIST_ITEMS,  // Bây giờ match "list_items/{id}/{title}"
+            arguments = listOf(
+                navArgument("id") { type = NavType.IntType },  // id là Int từ CategoryModel
+                navArgument("title") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: 0  // Lấy Int
+            val title = backStackEntry.arguments?.getString("title") ?: ""
+            ListItemScreen(
+                title = title,
+                id = id.toString(),  // Chuyển Int sang String cho loadFiltered(id: String)
+                onBackClick = { navController.popBackStack() },
+                navController = navController,
+                viewModel = MainViewModel()
             )
         }
     }

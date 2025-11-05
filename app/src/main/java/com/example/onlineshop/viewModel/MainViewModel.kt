@@ -1,6 +1,7 @@
 package com.example.onlineshop.viewModel
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.onlineshop.model.CategoryModel
 import com.example.onlineshop.model.ItemsModel
@@ -13,4 +14,12 @@ class MainViewModel(): ViewModel() {
     fun loadCategory(): MutableState<List<CategoryModel>> = repo.loadCategory()
     fun loadPopular(): MutableState<List<ItemsModel>> = repo.loadPopular()
     fun loadFiltered(id: String): MutableState<List<ItemsModel>> = repo.loadFiltered(id)
+
+    val selectedItem: MutableState<ItemsModel?> = mutableStateOf(null)
+
+    fun getItemById(itemId: String) {
+        repo.loadItemById(itemId) { item ->
+            selectedItem.value = item
+        }
+    }
 }

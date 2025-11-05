@@ -76,12 +76,10 @@ class MainRepository {
                         val data = i.getValue(ItemsModel::class.java)
                         data?.let {
                             data.id = i.key ?: ""
-                            Log.d(TAG, "loadPopular: ${data.id}")
                             lists.add(it)
                         }
                     }
                     listData.value = lists
-                    Log.d(TAG, "loadPopular: Loaded ${listData.value} items")
                 }
             }
 
@@ -118,5 +116,22 @@ class MainRepository {
         })
 
         return _filteredItems
+    }
+
+    fun loadItemById(itemId: String, callback: (ItemsModel?) -> Unit) {
+        Log.d(TAG, "loadItemById: Loading item with id=$itemId")
+        val ref = db.getReference("Items").child(itemId)
+        ref.get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                val item = snapshot.getValue(ItemsModel::class.java)
+                item?.id = itemId
+                callback(item)
+            } else {
+                callback(null)
+            }
+        }.addOnFailureListener { error ->
+            Log.e(TAG, "loadItemById failed: ${error.message}")
+            callback(null)
+        }
     }
 }
