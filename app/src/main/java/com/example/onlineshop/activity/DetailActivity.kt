@@ -1,5 +1,4 @@
-// DetailScreen.kt (cập nhật: không cần onAddToCartClick/onCartClick, inline logic)
-package com.example.onlineshop.screens
+package com.example.onlineshop.activity
 
 import android.util.Log
 import android.widget.Toast
@@ -53,6 +52,9 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.onlineshop.R
 import com.example.onlineshop.helper.CartManager
+import com.example.onlineshop.model.CartItem
+import com.example.onlineshop.navigation.Routes
+import com.example.onlineshop.viewModel.CheckoutViewModel
 import com.example.onlineshop.viewModel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -61,7 +63,8 @@ fun DetailScreen(
     itemId: String,
     onBackClick: () -> Unit,
     navController: NavController,
-    viewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel = viewModel(),
+    checkoutViewModel: CheckoutViewModel = viewModel()
 ) {
     val context = LocalContext.current
     var selectedModelIndex by remember { mutableIntStateOf(-1) }
@@ -268,6 +271,17 @@ fun DetailScreen(
                             .show()
                         return@Button
                     }
+                    val singleItem = CartItem(
+                        productId = currentItem.id,
+                        model = selectedModel,
+                        price = currentItem.price,
+                        quantity = 1,
+                        imageUrl = currentItem.picUrl.firstOrNull() ?: "",
+                        title = currentItem.title
+                    )
+                    checkoutViewModel.setSingleItem(singleItem)
+                    navController.navigate(Routes.CHECK_OUT)
+                    Log.d("Checkout", "SingleItem saved to ViewModel: $singleItem")
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(

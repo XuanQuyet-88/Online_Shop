@@ -3,18 +3,21 @@ package com.example.onlineshop.navigation
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.onlineshop.activity.CartScreen
+import com.example.onlineshop.activity.CheckOutScreen
+import com.example.onlineshop.activity.DetailScreen
 import com.example.onlineshop.activity.ListItemScreen
 import com.example.onlineshop.activity.MainActivityScreen
-import com.example.onlineshop.screens.DetailScreen
 import com.example.onlineshop.screens.LoginScreen
 import com.example.onlineshop.screens.RegisterScreen
 import com.example.onlineshop.screens.ResetPasswordScreen
+import com.example.onlineshop.viewModel.CheckoutViewModel
 import com.example.onlineshop.viewModel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -24,6 +27,7 @@ fun OnlineShopApp() {
     val navController = rememberNavController()
     val auth = FirebaseAuth.getInstance()
     val startDestination = if (auth.currentUser != null) Routes.HOME else Routes.LOGIN
+    val checkoutViewModel: CheckoutViewModel = viewModel()
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Routes.LOGIN) {
@@ -77,7 +81,8 @@ fun OnlineShopApp() {
             CartScreen(
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+                navController = navController
             )
         }
         composable(
@@ -90,7 +95,8 @@ fun OnlineShopApp() {
             DetailScreen(
                 itemId = itemId,
                 onBackClick = { navController.popBackStack() },
-                navController = navController
+                navController = navController,
+                checkoutViewModel = checkoutViewModel
             )
         }
         composable(
@@ -108,6 +114,14 @@ fun OnlineShopApp() {
                 onBackClick = { navController.popBackStack() },
                 navController = navController,
                 viewModel = MainViewModel()
+            )
+        }
+
+        composable(Routes.CHECK_OUT) {
+            CheckOutScreen(
+                onBackClick = { navController.popBackStack() },
+                navController = navController,
+                checkoutViewModel = checkoutViewModel
             )
         }
     }

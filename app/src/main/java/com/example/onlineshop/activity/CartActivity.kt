@@ -49,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.onlineshop.R
 import com.example.onlineshop.helper.CartManager
@@ -56,7 +57,7 @@ import com.example.onlineshop.model.CartItem
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun CartScreen(onBackClick: () -> Unit) {
+fun CartScreen(onBackClick: () -> Unit, navController: NavController) {
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
     var cartItems by remember { mutableStateOf<List<CartItem>>(emptyList()) }
     var refreshKey by remember { mutableStateOf(0) }
@@ -162,11 +163,7 @@ fun CartScreen(onBackClick: () -> Unit) {
             )
             Button(
                 onClick = {
-                    Toast.makeText(
-                        context,
-                        "Checkout not implemented",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    navController.navigate("check_out")
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.darkBrown)
