@@ -24,11 +24,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -146,7 +148,9 @@ fun CartScreen(onBackClick: () -> Unit) {
             }
         }
         Row(
-            modifier = Modifier.fillMaxWidth().height(100.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -183,6 +187,7 @@ fun CartItemRow(
     onDecreaseCLick: () -> Unit,
     onDeleteClick: () -> Unit = {}
 ) {
+    var showDialogDelete by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -208,7 +213,7 @@ fun CartItemRow(
             IconButton(onClick = onDecreaseCLick) {
                 Icon(
                     imageVector = Icons.Default.Remove,
-                    contentDescription = "Delete"
+                    contentDescription = "Decrease"
                 )
             }
             Text(
@@ -219,12 +224,33 @@ fun CartItemRow(
             IconButton(onClick = onIncreaseClick) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Delete"
+                    contentDescription = "Increase"
                 )
             }
-            IconButton(onClick = onDeleteClick) {
+            IconButton(onClick = { showDialogDelete = true }) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
             }
         }
+    }
+
+    if (showDialogDelete) {
+        AlertDialog(
+            onDismissRequest = { showDialogDelete = false },
+            title = { Text("Delete Item") },
+            text = { Text("Are you sure you want to delete this item?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDeleteClick()
+                    showDialogDelete = false
+                }) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {showDialogDelete = false}) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 }

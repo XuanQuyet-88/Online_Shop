@@ -88,23 +88,23 @@ fun OnlineShopApp() {
         ) { backStackEntry ->
             val itemId = backStackEntry.arguments?.getString("itemId") ?: ""
             DetailScreen(
-                itemId = itemId,  // Pass mới
+                itemId = itemId,
                 onBackClick = { navController.popBackStack() },
                 navController = navController
             )
         }
         composable(
-            Routes.LIST_ITEMS,  // Bây giờ match "list_items/{id}/{title}"
+            Routes.LIST_ITEMS,
             arguments = listOf(
-                navArgument("id") { type = NavType.IntType },  // id là Int từ CategoryModel
+                navArgument("id") { type = NavType.IntType },
                 navArgument("title") { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id") ?: 0  // Lấy Int
+            val id = backStackEntry.arguments?.getInt("id") ?: 0
             val title = backStackEntry.arguments?.getString("title") ?: ""
             ListItemScreen(
                 title = title,
-                id = id.toString(),  // Chuyển Int sang String cho loadFiltered(id: String)
+                id = id.toString(),
                 onBackClick = { navController.popBackStack() },
                 navController = navController,
                 viewModel = MainViewModel()

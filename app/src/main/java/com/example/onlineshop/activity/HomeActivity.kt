@@ -81,7 +81,7 @@ fun MainActivityScreen(
         Log.d("ccc", "Chưa đăng nhập")
     }
 
-    val viewModel = MainViewModel()
+    val viewModel : MainViewModel = viewModel()
     val bannerState = viewModel.loadBanner()
     val categoriesState = viewModel.loadCategory()
     val popularState = viewModel.loadPopular()
@@ -155,7 +155,7 @@ fun MainActivityScreen(
                 }
             }
 
-            // Banner với loading
+            // Banner
             item {
                 if (showBannerLoading) {
                     Box(
@@ -171,7 +171,7 @@ fun MainActivityScreen(
                 }
             }
 
-            // Categories với navController
+            // Categories
             item {
                 if (showCategoryLoading) {
                     Box(
@@ -190,7 +190,7 @@ fun MainActivityScreen(
                 }
             }
 
-            // Popular với loading
+            // Popular
             item {
                 if (showPopularLoading) {
                     Box(
@@ -203,7 +203,7 @@ fun MainActivityScreen(
                     }
                 } else {
                     SectionTitle(title = "Popular Items", actionText = "See all")
-                    ListItems(popularState.value)
+                    ListItems(popularState.value, navController)
                 }
             }
         }
@@ -305,9 +305,7 @@ fun CategoryList(
                 isSelected = selectedIndex == index,
                 onItemClick = {
                     selectedIndex = index
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        navController.navigate("list_items/${categories[index].id}/${categories[index].title}")
-                    }, 500)
+                    navController.navigate("list_items/${categories[index].id}/${categories[index].title}")
                 }
             )
         }
@@ -321,7 +319,9 @@ fun CategoryItem(
     onItemClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier.clickable(onClick = onItemClick),
+        modifier = Modifier.clickable(onClick = {
+            onItemClick()
+        }),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(

@@ -7,15 +7,35 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -88,7 +108,7 @@ fun DetailScreen(
                 .height(430.dp)
                 .padding(bottom = 16.dp)
         ) {
-            val (back, fav, mainImage, thumbnail) = createRefs()
+            val (back, mainImage, thumbnail) = createRefs()
 
             Image(
                 painter = rememberAsyncImagePainter(
@@ -204,11 +224,13 @@ fun DetailScreen(
             Button(
                 onClick = {
                     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return@Button
-                    val selectedModel = if (selectedModelIndex >= 0 && currentItem.model.isNotEmpty()) {
-                        currentItem.model[selectedModelIndex]
-                    } else ""
+                    val selectedModel =
+                        if (selectedModelIndex >= 0 && currentItem.model.isNotEmpty()) {
+                            currentItem.model[selectedModelIndex]
+                        } else ""
                     if (selectedModel.isEmpty()) {
-                        Toast.makeText(context, "Please select a model first", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Please select a model first", Toast.LENGTH_SHORT)
+                            .show()
                         return@Button
                     }
                     Log.d("ccc", "id product: ${currentItem.id}")
@@ -234,6 +256,30 @@ fun DetailScreen(
             ) {
                 Text(text = "Add to cart", color = Color.White)
             }
+            Button(
+                onClick = {
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return@Button
+                    val selectedModel =
+                        if (selectedModelIndex >= 0 && currentItem.model.isNotEmpty()) {
+                            currentItem.model[selectedModelIndex]
+                        } else ""
+                    if (selectedModel.isEmpty()) {
+                        Toast.makeText(context, "Please select a model first", Toast.LENGTH_SHORT)
+                            .show()
+                        return@Button
+                    }
+                },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.darkBrown)
+                ),
+                modifier = Modifier
+                    .weight(1.5f)
+                    .padding(start = 8.dp)
+                    .height(50.dp)
+            ) {
+                Text(text = "Buy Now")
+            }
         }
     }
 }
@@ -251,7 +297,7 @@ fun ModelDelector(
                     .padding(end = 16.dp)
                     .height(40.dp)
                     .border(
-                        1.dp, colorResource(R.color.darkBrown), RoundedCornerShape(10.dp)  // Giữ nguyên border
+                        1.dp, colorResource(R.color.darkBrown), RoundedCornerShape(10.dp)
                     )
                     .background(
                         if (index == selectedModelIndex) colorResource(R.color.darkBrown)

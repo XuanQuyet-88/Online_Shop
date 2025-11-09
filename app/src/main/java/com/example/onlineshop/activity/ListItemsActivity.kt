@@ -24,28 +24,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.onlineshop.R
 import com.example.onlineshop.viewModel.MainViewModel
-
-//class ListItemsActivity : BaseActivity() {
-//    private val viewModel = MainViewModel()
-//    private var id: String = ""
-//    private var title: String = ""
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        id = intent.getStringExtra("id") ?: ""
-//        title = intent.getStringExtra("title") ?: ""
-//        setContent {
-//            ListItemScreen(
-//                title = title,
-//                onBackClick = { finish() },
-//                viewModel = viewModel,
-//                id = id
-//            )
-//        }
-//    }
-//}
-
 @Composable
 fun ListItemScreen(
     title: String,

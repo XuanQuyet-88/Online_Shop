@@ -44,6 +44,9 @@ fun PopularItem(items: List<ItemsModel>, pos: Int, navController: NavController)
         modifier = Modifier
             .padding(8.dp)
             .wrapContentHeight()
+            .clickable{
+                navController.navigate("detail/${items[pos].id}")
+            }
     ) {
         AsyncImage(
             model = items[pos].picUrl.firstOrNull(),
@@ -169,7 +172,7 @@ fun PopularItem(items: List<ItemsModel>, pos: Int) {
 }
 
 @Composable
-fun ListItems(items: List<ItemsModel>) {
+fun ListItems(items: List<ItemsModel>, navController: NavController) {
     LazyRow(
         modifier = Modifier
             .padding(top = 8.dp)
@@ -177,7 +180,7 @@ fun ListItems(items: List<ItemsModel>) {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(items.size) { index ->
-            PopularItem(items, index)
+            PopularItem(items, index, navController)
         }
     }
 }
