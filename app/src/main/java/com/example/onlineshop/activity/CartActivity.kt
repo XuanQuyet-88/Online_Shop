@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -49,11 +51,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.onlineshop.R
 import com.example.onlineshop.helper.CartManager
 import com.example.onlineshop.model.CartItem
+import com.example.onlineshop.navigation.Routes
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -150,8 +154,7 @@ fun CartScreen(onBackClick: () -> Unit, navController: NavController) {
         }
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -169,9 +172,67 @@ fun CartScreen(onBackClick: () -> Unit, navController: NavController) {
                     containerColor = colorResource(R.color.darkBrown)
                 ),
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.padding(end = 16.dp, bottom = 24.dp)
+                modifier = Modifier.padding(end = 16.dp, bottom = 16.dp)
             ) {
                 Text(text = "Checkout", color = Color.White, fontSize = 18.sp)
+            }
+        }
+        ConstraintLayout(modifier = Modifier.background(Color.White)) {
+            val bottomMenu = createRef()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .shadow(8.dp, RoundedCornerShape(30.dp))
+                    .background(colorResource(R.color.darkBrown))
+                    .constrainAs(bottomMenu) {
+                        bottom.linkTo(parent.bottom, margin = 16.dp)
+                    }
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                        .background(
+                            colorResource(R.color.darkBrown),
+                            shape = RoundedCornerShape(10.dp)
+                        ),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    BottomMenuItem(
+                        icon = painterResource(R.drawable.btn_1),
+                        text = "Home",
+                        isSelected = false,
+                        onItemClick = { navController.navigate(Routes.HOME) }
+                    )
+                    BottomMenuItem(
+                        icon = painterResource(R.drawable.btn_2),
+                        text = "Cart",
+                        isSelected = true,
+                        onItemClick = {
+                            Toast.makeText(
+                                context,
+                                "You are in cart screen",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
+                    BottomMenuItem(
+                        icon = painterResource(R.drawable.btn_3),
+                        text = "Favorite",
+                        onItemClick = { /* Favorite */ }
+                    )
+                    BottomMenuItem(
+                        icon = painterResource(R.drawable.btn_4),
+                        text = "Orders",
+                        onItemClick = { /* Orders */ }
+                    )
+                    BottomMenuItem(
+                        icon = painterResource(R.drawable.btn_5),
+                        text = "Profile",
+                        onItemClick = { /* Profile */ }
+                    )
+                }
             }
         }
     }
@@ -244,7 +305,7 @@ fun CartItemRow(
                 }
             },
             dismissButton = {
-                TextButton(onClick = {showDialogDelete = false}) {
+                TextButton(onClick = { showDialogDelete = false }) {
                     Text("Cancel")
                 }
             }

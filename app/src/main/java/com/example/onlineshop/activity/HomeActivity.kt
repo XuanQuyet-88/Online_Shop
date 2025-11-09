@@ -1,11 +1,14 @@
 package com.example.onlineshop.activity
 
+import android.R.attr.background
+import android.R.id.background
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -59,6 +63,7 @@ import coil.request.ImageRequest
 import com.example.onlineshop.R
 import com.example.onlineshop.model.CategoryModel
 import com.example.onlineshop.model.SliderModel
+import com.example.onlineshop.navigation.Routes
 import com.example.onlineshop.viewModel.AuthViewModel
 import com.example.onlineshop.viewModel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -232,11 +237,13 @@ fun MainActivityScreen(
                 BottomMenuItem(
                     icon = painterResource(R.drawable.btn_1),
                     text = "Home",
-                    onItemClick = { /* Home logic */ }
+                    isSelected = true,
+                    onItemClick = { navController.navigate(Routes.HOME) }
                 )
                 BottomMenuItem(
                     icon = painterResource(R.drawable.btn_2),
                     text = "Cart",
+                    isSelected = false,
                     onItemClick = onCartClick
                 )
                 BottomMenuItem(
@@ -263,12 +270,26 @@ fun MainActivityScreen(
 fun BottomMenuItem(
     icon: Painter,
     text: String,
+    isSelected: Boolean = false,
     onItemClick: (() -> Unit)? = null
 ) {
     Column(
         modifier = Modifier
             .height(70.dp)
             .clickable { onItemClick?.invoke() }
+            .scale(if (isSelected) 1.2f else 1f)
+            .then(
+                if (isSelected) {
+                    Modifier.shadow(
+                        elevation = 8.dp,
+                        shape = RoundedCornerShape(8.dp),
+                        ambientColor = Color.Black.copy(alpha = 0.3f),
+                        spotColor = Color.Black.copy(alpha = 0.3f)
+                    )
+                } else {
+                    Modifier
+                }
+            )
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
