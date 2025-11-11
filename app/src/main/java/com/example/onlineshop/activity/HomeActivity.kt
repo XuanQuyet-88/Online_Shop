@@ -254,7 +254,8 @@ fun MainActivityScreen(
                 BottomMenuItem(
                     icon = painterResource(R.drawable.btn_4),
                     text = "Orders",
-                    onItemClick = { /* Orders */ }
+                    onItemClick = { navController.navigate(Routes.ORDERS)},
+                    isSelected = false
                 )
                 BottomMenuItem(
                     icon = painterResource(R.drawable.btn_5),

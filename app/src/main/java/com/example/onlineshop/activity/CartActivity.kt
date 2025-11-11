@@ -103,7 +103,6 @@ fun CartScreen(onBackClick: () -> Unit, navController: NavController) {
                     .weight(1f)
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center
-
             )
         }
 
@@ -225,7 +224,8 @@ fun CartScreen(onBackClick: () -> Unit, navController: NavController) {
                     BottomMenuItem(
                         icon = painterResource(R.drawable.btn_4),
                         text = "Orders",
-                        onItemClick = { /* Orders */ }
+                        isSelected = false,
+                        onItemClick = { navController.navigate(Routes.ORDERS) }
                     )
                     BottomMenuItem(
                         icon = painterResource(R.drawable.btn_5),
@@ -263,9 +263,9 @@ fun CartItemRow(
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(item.productId, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(item.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text("Model: ${item.model}", fontSize = 14.sp, color = Color.Gray)
-            Text("$${item.price}", fontSize = 16.sp, color = colorResource(R.color.darkBrown))
+            Text("Price: $${item.price}", fontSize = 16.sp, color = colorResource(R.color.darkBrown))
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onDecreaseCLick) {

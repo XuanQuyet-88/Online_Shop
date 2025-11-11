@@ -78,7 +78,6 @@ fun DetailScreen(
     val item = viewModel.selectedItem.value
 
     val isLoading = item == null
-    val hasError = false
 
     if (isLoading) {
         Box(
@@ -87,10 +86,10 @@ fun DetailScreen(
                 .statusBarsPadding(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator()  // Show spinner
+            CircularProgressIndicator()
             Log.d("DetailScreen", "Showing loading for id=$itemId")
         }
-        return  // Quan trọng: Return sớm để tránh access null
+        return
     }
 
     val currentItem = item
@@ -115,7 +114,7 @@ fun DetailScreen(
 
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = selectedImageUrl.ifEmpty { R.drawable.user_sign_in }  // Fallback nếu empty
+                    model = selectedImageUrl.ifEmpty { R.drawable.user_sign_in }
                 ),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,

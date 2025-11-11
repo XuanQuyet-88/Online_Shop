@@ -59,14 +59,17 @@ import com.example.onlineshop.R
 import com.example.onlineshop.helper.CartManager
 import com.example.onlineshop.model.CartItem
 import com.example.onlineshop.viewModel.CheckoutViewModel
+import com.example.onlineshop.viewModel.OrderViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CheckOutScreen(
     onBackClick: () -> Unit,
     navController: NavController,
-    checkoutViewModel: CheckoutViewModel = viewModel()
+    checkoutViewModel: CheckoutViewModel = viewModel(),
+    orderViewModel: OrderViewModel = viewModel()
 ) {
     val context = LocalContext.current
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: run {
@@ -78,11 +81,12 @@ fun CheckOutScreen(
     var cartItems by remember { mutableStateOf<List<CartItem>>(emptyList()) }
     var address by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
-    var selectedPayment by remember { mutableStateOf("") }
+    var selectedPayment by remember { mutableStateOf("cash") }
     var isLoading by remember { mutableStateOf(true) }
     val singleItem = checkoutViewModel.singleItem.value
     val isSingleItem = singleItem != null
     val totalPrice = cartItems.sumOf { it.price * it.quantity }
+    var isCreatingOrder by remember { mutableStateOf(false) }
     Log.d("Checkout", "$singleItem")
 
     LaunchedEffect(userId, singleItem) {
@@ -304,9 +308,20 @@ fun CheckOutScreen(
                         ).show()
                         return@Button
                     }
+
+                    // add order
+                    orderViewModel.createOrder(
+                        cartItems = cartItems,
+                        totalPrice = totalPrice,
+                        address = address,
+                        phone = phone,
+                        paymentMethod = selectedPayment
+                    )
+
                     if(!isSingleItem){
                         CartManager.clearCart(userId)
                     }
+
                     Toast.makeText(context, "Order placed successfully!", Toast.LENGTH_SHORT).show()
                     checkoutViewModel.clearSingleItem()
                     navController.navigate("orders") {
