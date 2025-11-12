@@ -25,15 +25,22 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabPosition
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +63,7 @@ import com.example.onlineshop.navigation.Routes
 import com.example.onlineshop.viewModel.OrderViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun OrderScreen(
@@ -80,6 +88,10 @@ fun OrderScreen(
 //            viewModel.error.value = null
         }
     }
+
+    val statusList = remember { listOf("All", "Pending", "Shipped", "Delivered", "Cancelled") }
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -161,19 +173,79 @@ fun OrderScreen(
                     }
 
                     else -> {
-                        LazyColumn(
+                        val filteredOrders = remember(orders, selectedTabIndex) {
+                            if (selectedTabIndex == 0) {
+                                orders
+                            } else {
+                                orders.filter { it.status == statusList[selectedTabIndex] }
+                            }
+                        }
+                        Column(
                             modifier = Modifier
+                                .fillMaxSize()
                                 .padding(horizontal = 16.dp)
-                                .padding(bottom = 145.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            items(orders) { order ->
-                                OrderItemRow(
-                                    order = order,
-                                    onCancelClick = { orderId ->
-                                        viewModel.cancelOrder(orderId)
+                            ScrollableTabRow(
+                                selectedTabIndex = selectedTabIndex,
+                                modifier = Modifier.fillMaxWidth(),
+                                edgePadding = 16.dp,
+                                containerColor = TabRowDefaults.containerColor.copy(alpha = 0.1f),
+                                contentColor = Color.Black,
+                                indicator = { tabPositions: List<TabPosition> ->
+                                    TabRowDefaults.Indicator(
+                                        modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                                        color = colorResource(R.color.orange)
+                                    )
+                                }
+                            ) {
+                                statusList.forEachIndexed { index, status ->
+                                    Tab(
+                                        selected = selectedTabIndex == index,
+                                        onClick = {
+                                            scope.launch {
+                                                selectedTabIndex = index
+                                            }
+                                        },
+                                        text = {
+                                            val selectedColor =
+                                                if (selectedTabIndex == index) colorResource(R.color.orange) else Color.Black
+                                            Text(
+                                                text = status,
+                                                color = selectedColor
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                            if (filteredOrders.isEmpty()) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = "No orders for ${statusList[selectedTabIndex]} status",
+                                        fontSize = 18.sp,
+                                        color = Color.Gray
+                                    )
+                                }
+                            } else {
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .fillMaxSize()
+                                        .padding(bottom = 145.dp),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    items(filteredOrders) { order ->
+                                        OrderItemRow(
+                                            order = order,
+                                            onCancelClick = { orderId ->
+                                                viewModel.cancelOrder(orderId)
+                                            }
+                                        )
                                     }
-                                )
+                                }
                             }
                         }
                     }
@@ -367,7 +439,7 @@ fun OrderItemRow(order: Order, onCancelClick: (String) -> Unit) {
                         }
                     },
                     dismissButton = {
-                        TextButton(onClick = {showDialogCancel = false}) {
+                        TextButton(onClick = { showDialogCancel = false }) {
                             Text("Cancel")
                         }
                     }
