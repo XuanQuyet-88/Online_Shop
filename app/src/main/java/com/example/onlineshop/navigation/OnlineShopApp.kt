@@ -1,7 +1,9 @@
 package com.example.onlineshop.navigation
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -16,13 +18,16 @@ import com.example.onlineshop.activity.ListItemScreen
 import com.example.onlineshop.activity.MainActivityScreen
 import com.example.onlineshop.activity.OrderScreen
 import com.example.onlineshop.activity.ProfileScreen
+import com.example.onlineshop.activity.SearchScreen
 import com.example.onlineshop.screens.LoginScreen
 import com.example.onlineshop.screens.RegisterScreen
 import com.example.onlineshop.screens.ResetPasswordScreen
 import com.example.onlineshop.viewModel.CheckoutViewModel
 import com.example.onlineshop.viewModel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
+import okhttp3.Route
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun OnlineShopApp() {
@@ -135,6 +140,11 @@ fun OnlineShopApp() {
         composable(Routes.PROFILE) {
             ProfileScreen(
                 onBackClick = {navController.popBackStack()},
+                navController = navController
+            )
+        }
+        composable(Routes.SEARCH) {
+            SearchScreen(
                 navController = navController
             )
         }

@@ -16,6 +16,14 @@ class MainRepository {
     private val TAG = "FirebaseRepo"
     private val db = FirebaseDatabase.getInstance()
     private val _filteredItems = mutableStateOf<List<ItemsModel>>(emptyList())
+    private var allItems: List<ItemsModel> = emptyList()
+
+    init {
+        loadAllItem { items ->
+            allItems = items
+        }
+    }
+
     fun loadBanner(): MutableState<List<SliderModel>> {
         val listData = mutableStateOf<List<SliderModel>>(emptyList())
         val ref = db.getReference("Banner")
@@ -133,5 +141,78 @@ class MainRepository {
             Log.e(TAG, "loadItemById failed: ${error.message}")
             callback(null)
         }
+    }
+
+    fun loadAllItem(callback: (List<ItemsModel>) -> Unit) {
+        val ref = db.getReference("Items")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val lists = mutableListOf<ItemsModel>()
+                if (snapshot.exists()) {
+                    for (i in snapshot.children) {
+                        val data = i.getValue(ItemsModel::class.java)
+                        data?.let {
+                            data.id = i.key ?: ""
+                            lists.add(it)
+                        }
+                    }
+                    callback(lists)
+                } else {
+                    callback(emptyList())
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "loadAllItem cancelled: ${error.message}")
+                callback(emptyList())
+            }
+        })
+    }
+
+    fun loadSearchByTitle(query: String) : MutableState<List<ItemsModel>>{
+        val searchState = mutableStateOf<List<ItemsModel>>(emptyList())
+        val ref = db.getReference("Items")
+
+        if(query.isBlank() || query.isEmpty() || query == ""){
+            searchState.value = emptyList()
+            return searchState
+        }
+
+        if (allItems.isEmpty()) {
+            val ref = db.getReference("Items")
+            ref.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val lists = mutableListOf<ItemsModel>()
+                    if (snapshot.exists()) {
+                        for (i in snapshot.children) {
+                            val data = i.getValue(ItemsModel::class.java)
+                            data?.let {
+                                it.id = i.key ?: ""
+                                lists.add(it)
+                            }
+                        }
+                    }
+                    allItems = lists
+
+                    val queryLower = query.lowercase()
+                    val results = allItems.filter { item ->
+                        item.title.lowercase().contains(queryLower)
+                    }
+                    searchState.value = results
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG, "loadSearchByTitle loading failed: ${error.message}")
+                }
+            })
+        } else {
+            val queryLower = query.lowercase()
+            val results = allItems.filter { item ->
+                item.title.lowercase().contains(queryLower)
+            }
+            searchState.value = results
+        }
+
+        return searchState
     }
 }

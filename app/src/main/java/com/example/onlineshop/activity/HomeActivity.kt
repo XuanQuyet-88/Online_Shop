@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.onlineshop.R
@@ -67,7 +68,7 @@ import kotlinx.coroutines.delay
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun MainActivityScreen(
-    navController: androidx.navigation.NavController,
+    navController: NavController,
     onCartClick: () -> Unit
 ) {
     val authViewModel: AuthViewModel = viewModel()
@@ -144,7 +145,9 @@ fun MainActivityScreen(
                     Row {
                         Image(
                             painter = painterResource(R.drawable.search_icon),
-                            contentDescription = null
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clickable { navController.navigate(Routes.SEARCH) }
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Image(
@@ -240,6 +243,11 @@ fun MainActivityScreen(
                     text = "Cart",
                     isSelected = false,
                     onItemClick = onCartClick
+                )
+                BottomMenuItem(
+                    icon = painterResource(R.drawable.btn_3),
+                    text = "Favorite",
+                    onItemClick = { /* Favorite */ }
                 )
                 BottomMenuItem(
                     icon = painterResource(R.drawable.btn_4),

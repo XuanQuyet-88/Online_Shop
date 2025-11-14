@@ -11,4 +11,5 @@ object Routes {
     const val CHECK_OUT = "check_out"
     const val ORDERS = "orders"
     const val PROFILE = "profile"
+    const val SEARCH = "search"
 }
