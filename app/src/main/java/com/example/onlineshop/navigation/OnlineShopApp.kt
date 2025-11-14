@@ -15,6 +15,7 @@ import com.example.onlineshop.activity.DetailScreen
 import com.example.onlineshop.activity.ListItemScreen
 import com.example.onlineshop.activity.MainActivityScreen
 import com.example.onlineshop.activity.OrderScreen
+import com.example.onlineshop.activity.ProfileScreen
 import com.example.onlineshop.screens.LoginScreen
 import com.example.onlineshop.screens.RegisterScreen
 import com.example.onlineshop.screens.ResetPasswordScreen
@@ -127,6 +128,12 @@ fun OnlineShopApp() {
         }
         composable(Routes.ORDERS) {
             OrderScreen(
+                onBackClick = {navController.popBackStack()},
+                navController = navController
+            )
+        }
+        composable(Routes.PROFILE) {
+            ProfileScreen(
                 onBackClick = {navController.popBackStack()},
                 navController = navController
             )

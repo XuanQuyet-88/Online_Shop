@@ -1,14 +1,9 @@
 package com.example.onlineshop.activity
 
-import android.R.attr.background
-import android.R.id.background
 import android.annotation.SuppressLint
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -86,7 +81,7 @@ fun MainActivityScreen(
         Log.d("ccc", "Chưa đăng nhập")
     }
 
-    val viewModel : MainViewModel = viewModel()
+    val viewModel: MainViewModel = viewModel()
     val bannerState = viewModel.loadBanner()
     val categoriesState = viewModel.loadCategory()
     val popularState = viewModel.loadPopular()
@@ -247,20 +242,16 @@ fun MainActivityScreen(
                     onItemClick = onCartClick
                 )
                 BottomMenuItem(
-                    icon = painterResource(R.drawable.btn_3),
-                    text = "Favorite",
-                    onItemClick = { /* Favorite */ }
-                )
-                BottomMenuItem(
                     icon = painterResource(R.drawable.btn_4),
                     text = "Orders",
-                    onItemClick = { navController.navigate(Routes.ORDERS)},
+                    onItemClick = { navController.navigate(Routes.ORDERS) },
                     isSelected = false
                 )
                 BottomMenuItem(
                     icon = painterResource(R.drawable.btn_5),
                     text = "Profile",
-                    onItemClick = { /* Profile */ }
+                    isSelected = false,
+                    onItemClick = { navController.navigate(Routes.PROFILE) }
                 )
             }
         }

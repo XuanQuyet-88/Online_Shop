@@ -288,11 +288,6 @@ fun OrderScreen(
                         onItemClick = { navController.navigate(Routes.CART) }
                     )
                     BottomMenuItem(
-                        icon = painterResource(R.drawable.btn_3),
-                        text = "Favorite",
-                        onItemClick = { /* TODO */ }
-                    )
-                    BottomMenuItem(
                         icon = painterResource(R.drawable.btn_4),
                         text = "Orders",
                         isSelected = true,
@@ -307,7 +302,8 @@ fun OrderScreen(
                     BottomMenuItem(
                         icon = painterResource(R.drawable.btn_5),
                         text = "Profile",
-                        onItemClick = { /* TODO */ }
+                        isSelected = false,
+                        onItemClick = { navController.navigate(Routes.PROFILE) }
                     )
                 }
             }

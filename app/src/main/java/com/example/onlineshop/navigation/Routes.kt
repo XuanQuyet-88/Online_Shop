@@ -10,4 +10,5 @@ object Routes {
     const val LIST_ITEMS = "list_items/{id}/{title}"
     const val CHECK_OUT = "check_out"
     const val ORDERS = "orders"
+    const val PROFILE = "profile"
 }

@@ -217,11 +217,6 @@ fun CartScreen(onBackClick: () -> Unit, navController: NavController) {
                         }
                     )
                     BottomMenuItem(
-                        icon = painterResource(R.drawable.btn_3),
-                        text = "Favorite",
-                        onItemClick = { /* Favorite */ }
-                    )
-                    BottomMenuItem(
                         icon = painterResource(R.drawable.btn_4),
                         text = "Orders",
                         isSelected = false,
@@ -230,7 +225,8 @@ fun CartScreen(onBackClick: () -> Unit, navController: NavController) {
                     BottomMenuItem(
                         icon = painterResource(R.drawable.btn_5),
                         text = "Profile",
-                        onItemClick = { /* Profile */ }
+                        isSelected = false,
+                        onItemClick = { navController.navigate(Routes.PROFILE) }
                     )
                 }
             }
