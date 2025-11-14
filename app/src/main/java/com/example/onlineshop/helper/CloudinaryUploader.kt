@@ -1,4 +1,3 @@
-// CloudinaryUploader.kt (Updated with better error handling)
 package com.example.onlineshop.helper
 
 import android.content.Context
@@ -16,7 +15,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.TimeUnit
 
-// Cấu hình Cloudinary - Thay thế bằng thông tin thực của bạn
 const val CLOUDINARY_CLOUD_NAME = "dmevkycje"
 const val UPLOAD_PRESET = "avt_online_shop_app"
 
