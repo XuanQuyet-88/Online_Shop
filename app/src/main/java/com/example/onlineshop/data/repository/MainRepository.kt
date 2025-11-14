@@ -1,11 +1,11 @@
-package com.example.onlineshop.repository
+package com.example.onlineshop.data.repository
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import com.example.onlineshop.model.CategoryModel
-import com.example.onlineshop.model.ItemsModel
-import com.example.onlineshop.model.SliderModel
+import com.example.onlineshop.data.model.CategoryModel
+import com.example.onlineshop.data.model.ItemsModel
+import com.example.onlineshop.data.model.SliderModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

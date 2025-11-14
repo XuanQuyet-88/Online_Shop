@@ -1,4 +1,4 @@
-package com.example.onlineshop.activity
+package com.example.onlineshop.ui.screens.home
 
 import android.util.Log
 import android.widget.Toast
@@ -56,7 +56,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.onlineshop.R
 import com.example.onlineshop.helper.CartManager
-import com.example.onlineshop.model.CartItem
+import com.example.onlineshop.data.model.CartItem
 import com.example.onlineshop.navigation.Routes
 import com.google.firebase.auth.FirebaseAuth
 

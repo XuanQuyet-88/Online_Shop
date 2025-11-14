@@ -29,7 +29,7 @@
             android:name=".activity.DetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.IntroActivity"
+            android:name=".ui.screens.intro.IntroActivity"
             android:exported="false" />
         <activity
             android:name=".activity.BaseActivity"

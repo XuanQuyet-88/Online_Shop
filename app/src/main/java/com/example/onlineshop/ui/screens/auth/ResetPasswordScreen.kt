@@ -1,4 +1,4 @@
-package com.example.onlineshop.screens
+package com.example.onlineshop.ui.screens.auth
 
 import android.widget.Toast
 import androidx.compose.foundation.Image

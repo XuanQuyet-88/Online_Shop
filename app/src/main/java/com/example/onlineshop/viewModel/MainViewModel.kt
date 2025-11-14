@@ -4,10 +4,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.onlineshop.model.CategoryModel
-import com.example.onlineshop.model.ItemsModel
-import com.example.onlineshop.model.SliderModel
-import com.example.onlineshop.repository.MainRepository
+import com.example.onlineshop.data.model.CategoryModel
+import com.example.onlineshop.data.model.ItemsModel
+import com.example.onlineshop.data.model.SliderModel
+import com.example.onlineshop.data.repository.MainRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,6 +1,6 @@
 package com.example.onlineshop.helper
 
-import com.example.onlineshop.model.CartItem
+import com.example.onlineshop.data.model.CartItem
 import com.google.firebase.database.FirebaseDatabase
 
 object CartManager {

@@ -1,4 +1,4 @@
-package com.example.onlineshop.activity
+package com.example.onlineshop.ui.screens.home
 
 import android.os.Build
 import android.util.Log
@@ -66,9 +66,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.onlineshop.R
-import com.example.onlineshop.model.UserModel
+import com.example.onlineshop.data.model.UserModel
 import com.example.onlineshop.navigation.Routes
-import com.example.onlineshop.utils.uploadImageToCloudinary
+import com.example.onlineshop.helper.uploadImageToCloudinary
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -77,6 +77,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.collections.get
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable

@@ -4,9 +4,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.onlineshop.model.CartItem
-import com.example.onlineshop.model.Order
-import com.example.onlineshop.repository.OrderRepository
+import com.example.onlineshop.data.model.CartItem
+import com.example.onlineshop.data.model.Order
+import com.example.onlineshop.data.repository.OrderRepository
 import kotlinx.coroutines.launch
 
 class OrderViewModel : ViewModel() {

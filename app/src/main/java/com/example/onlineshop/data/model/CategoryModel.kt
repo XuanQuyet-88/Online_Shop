@@ -1,4 +1,4 @@
-package com.example.onlineshop.model
+package com.example.onlineshop.data.model
 
 data class CategoryModel(
     val title: String = "",

@@ -11,21 +11,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.onlineshop.activity.CartScreen
-import com.example.onlineshop.activity.CheckOutScreen
-import com.example.onlineshop.activity.DetailScreen
-import com.example.onlineshop.activity.ListItemScreen
-import com.example.onlineshop.activity.MainActivityScreen
-import com.example.onlineshop.activity.OrderScreen
-import com.example.onlineshop.activity.ProfileScreen
-import com.example.onlineshop.activity.SearchScreen
-import com.example.onlineshop.screens.LoginScreen
-import com.example.onlineshop.screens.RegisterScreen
-import com.example.onlineshop.screens.ResetPasswordScreen
+import com.example.onlineshop.ui.screens.home.CartScreen
+import com.example.onlineshop.ui.screens.home.CheckOutScreen
+import com.example.onlineshop.ui.screens.home.DetailScreen
+import com.example.onlineshop.ui.screens.home.ListItemScreen
+import com.example.onlineshop.ui.screens.home.MainActivityScreen
+import com.example.onlineshop.ui.screens.home.OrderScreen
+import com.example.onlineshop.ui.screens.home.ProfileScreen
+import com.example.onlineshop.ui.screens.home.SearchScreen
+import com.example.onlineshop.ui.screens.auth.LoginScreen
+import com.example.onlineshop.ui.screens.auth.RegisterScreen
+import com.example.onlineshop.ui.screens.auth.ResetPasswordScreen
 import com.example.onlineshop.viewModel.CheckoutViewModel
 import com.example.onlineshop.viewModel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
-import okhttp3.Route
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @SuppressLint("ViewModelConstructorInComposable")

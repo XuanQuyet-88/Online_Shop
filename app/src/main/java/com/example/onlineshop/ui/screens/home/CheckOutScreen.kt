@@ -1,4 +1,4 @@
-package com.example.onlineshop.activity
+package com.example.onlineshop.ui.screens.home
 
 import android.util.Log
 import android.widget.Toast
@@ -43,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -57,11 +58,10 @@ import androidx.wear.compose.material.RadioButton
 import coil.compose.rememberAsyncImagePainter
 import com.example.onlineshop.R
 import com.example.onlineshop.helper.CartManager
-import com.example.onlineshop.model.CartItem
+import com.example.onlineshop.data.model.CartItem
 import com.example.onlineshop.viewModel.CheckoutViewModel
 import com.example.onlineshop.viewModel.OrderViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -354,7 +354,7 @@ fun CheckoutItemRow(item: CartItem) {
         Image(
             painter = rememberAsyncImagePainter(model = item.imageUrl),
             contentDescription = null,
-            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(60.dp)
                 .background(Color.LightGray, RoundedCornerShape(8.dp))

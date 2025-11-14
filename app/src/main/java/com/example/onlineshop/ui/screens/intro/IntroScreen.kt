@@ -1,4 +1,4 @@
-package com.example.onlineshop.activity
+package com.example.onlineshop.ui.screens.intro
 
 import android.content.Intent
 import android.os.Bundle
@@ -32,6 +32,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.onlineshop.R
+import com.example.onlineshop.activity.MainActivity
 
 class IntroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

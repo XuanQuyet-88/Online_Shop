@@ -1,7 +1,7 @@
-package com.example.onlineshop.repository
+package com.example.onlineshop.data.repository
 
 import android.util.Log
-import com.example.onlineshop.model.UserModel
+import com.example.onlineshop.data.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.tasks.await

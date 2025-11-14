@@ -1,4 +1,4 @@
-package com.example.onlineshop.activity
+package com.example.onlineshop.ui.screens.home
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -58,7 +58,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.onlineshop.R
-import com.example.onlineshop.model.Order
+import com.example.onlineshop.data.model.Order
 import com.example.onlineshop.navigation.Routes
 import com.example.onlineshop.viewModel.OrderViewModel
 import com.google.firebase.auth.FirebaseAuth

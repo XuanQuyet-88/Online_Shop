@@ -1,4 +1,4 @@
-package com.example.onlineshop.screens
+package com.example.onlineshop.ui.screens.auth
 
 import android.util.Log
 import android.widget.Toast

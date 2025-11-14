@@ -1,4 +1,4 @@
-package com.example.onlineshop.activity
+package com.example.onlineshop.ui.screens.home
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -57,8 +57,9 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.onlineshop.R
-import com.example.onlineshop.model.CategoryModel
-import com.example.onlineshop.model.SliderModel
+import com.example.onlineshop.activity.ListItems
+import com.example.onlineshop.data.model.CategoryModel
+import com.example.onlineshop.data.model.SliderModel
 import com.example.onlineshop.navigation.Routes
 import com.example.onlineshop.viewModel.AuthViewModel
 import com.example.onlineshop.viewModel.MainViewModel
@@ -311,7 +312,7 @@ fun BottomMenuItem(
 @Composable
 fun CategoryList(
     categories: List<CategoryModel>,
-    navController: androidx.navigation.NavController
+    navController: NavController
 ) {
     var selectedIndex by remember { mutableStateOf(-1) }
 

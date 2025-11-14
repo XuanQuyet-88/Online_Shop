@@ -1,9 +1,8 @@
 // CloudinaryUploader.kt (Updated with better error handling)
-package com.example.onlineshop.utils
+package com.example.onlineshop.helper
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

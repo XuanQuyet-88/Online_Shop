@@ -1,4 +1,4 @@
-package com.example.onlineshop.model
+package com.example.onlineshop.data.model
 
 import android.os.Parcel
 import android.os.Parcelable

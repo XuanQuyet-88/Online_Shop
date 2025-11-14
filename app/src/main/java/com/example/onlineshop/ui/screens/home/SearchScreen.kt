@@ -1,4 +1,4 @@
-package com.example.onlineshop.activity
+package com.example.onlineshop.ui.screens.home
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -44,6 +44,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -55,7 +56,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.onlineshop.R
-import com.example.onlineshop.model.ItemsModel
+import com.example.onlineshop.data.model.ItemsModel
 import com.example.onlineshop.viewModel.MainViewModel
 import kotlinx.coroutines.delay
 
@@ -186,7 +187,7 @@ fun SearchItemRow(
                 .size(80.dp)
                 .clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop,
-            placeholder = androidx.compose.ui.res.painterResource(R.drawable.user_sign_in)
+            placeholder = painterResource(R.drawable.user_sign_in)
         )
         Column(
             modifier = Modifier.weight(1f)
